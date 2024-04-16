@@ -7,12 +7,11 @@ setup(
     install_requires=[
         'pandas>=1.1.5',
         'requests>=2.25.1',
-        'pytz',
-        'json'
+        'pytz'
     ],
     author='Antoine Zürcher (Solares Bauen)',
     author_email='zurcher@solares-bauen.fr',
-    description='Une API client pour interagir avec le service GlobalVisio.',
+    description='Une API client pour interagir avec la plateforme GlobalVisio.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/antoinezurchersb/api_globalvisio',
