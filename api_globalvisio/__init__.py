@@ -1,1 +1,1 @@
-from .core import ma_fonction
+from .core import GlobalVisioAPI

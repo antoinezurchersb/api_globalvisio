@@ -10,7 +10,7 @@ setup(
         'pytz',
         'json'
     ],
-    author='Antoine Zürcher',
+    author='Antoine Zürcher (Solares Bauen)',
     author_email='zurcher@solares-bauen.fr',
     description='Une API client pour interagir avec le service GlobalVisio.',
     long_description=open('README.md').read(),
