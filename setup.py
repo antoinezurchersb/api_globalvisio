@@ -5,11 +5,27 @@ setup(
     version='0.1',
     packages=find_packages(),
     install_requires=[
-        # Liste des dépendances nécessaires
+        'pandas>=1.1.5',
+        'requests>=2.25.1',
+        'pytz',
+        'json'
     ],
     author='Antoine Zürcher',
     author_email='zurcher@solares-bauen.fr',
-    description='Une description de votre package',
+    description='Une API client pour interagir avec le service GlobalVisio.',
     long_description=open('README.md').read(),
-    url='Lien_vers_le_repository',  # Optionnel
+    long_description_content_type='text/markdown',
+    url='https://github.com/antoinezurchersb/api_globalvisio',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'License :: OSI Approved :: MIT License',  # Remplacez par la licence sous laquelle vous voulez distribuer votre code
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+    ],
+    python_requires='>=3.7',
+    keywords='api, GlobalVisio, client, consumption data, energy data',
 )
