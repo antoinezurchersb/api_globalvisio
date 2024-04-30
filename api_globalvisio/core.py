@@ -4,14 +4,23 @@ import json
 import pytz
 from datetime import datetime, timedelta
 
-
 token_info = {
     'token': None,
     'expiration': None
 }
 
-identifiant = None
-password = None
+
+class Credentials:
+    def __init__(self):
+        self.identifiant = None
+        self.password = None
+
+    def set_credentials(self, identifiant, password):
+        self.identifiant = identifiant
+        self.password = password
+
+
+credentials = Credentials()
 
 
 def get_token():
@@ -28,8 +37,8 @@ def get_token():
 
     url = 'https://global-visio.com/api/auth/token'
     payload = json.dumps({
-        'username': identifiant,
-        'password': password
+        'username': credentials.identifiant,
+        'password': credentials.password
     })
     headers = {'Content-Type': 'application/json'}
 
@@ -97,7 +106,6 @@ def get_all_sites():
     except KeyError:
         print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
         return None, None
-
 
 
 def get_site_id_from_char(char):
@@ -674,7 +682,6 @@ def get_points_id_from_char(device_id, char):
     except KeyError:
         print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
         return None
-
 
 # site = Site(2243)
 # device = Equipement(1910)

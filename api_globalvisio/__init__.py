@@ -1,4 +1,4 @@
-from .core import GlobalVisioAPI
+from .core import *
 
 """
 Réinstallation d'un package Python localement:
