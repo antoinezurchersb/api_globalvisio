@@ -632,6 +632,55 @@ def get_device_id_from_char(site_id, char):
         return None
 
 
+def get_all_devices(site_id):
+    """
+    Récupère la liste d'équipements dont le nom contient les caractères spécifiés via une requête GET.
+    char est une liste de mots.
+    Gère les erreurs 404 et d'autres erreurs potentielles.
+    """
+    get_token()
+    if token_info['token'] is None:
+        return None
+
+    url = f"https://global-visio.com/api/devices/listBySite/{site_id}"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token_info["token"]}'
+    }
+
+    try:
+        response = requests.get(url, headers=headers, data=payload)
+        if response.status_code != 200:
+            print(
+                f"ERREUR lors de la requête d'équipements du site {site_id} avec l'API de GlobalVisio: {response.json()['message']}")
+            return None
+        response.raise_for_status()
+
+        if response.json()['response']['devices']:
+            data = pd.DataFrame(response.json()['response']['devices'])
+
+            if len(data):
+                return data
+            else:
+                print(
+                    f"ERREUR lors de la requête d'équipements du site {site_id} car aucun n'est trouvable.'")
+                return None
+        else:
+            print(
+                f"ERREUR lors de la requête d'équipements du site {site_id} avec l'API de GlobalVisio: données inexistantes")
+            return None
+    except requests.RequestException as e:
+        print(f"ERREUR lors de la requête d'équipements du site {site_id} avec l'API de GlobalVisio: {e}")
+        return None
+    except json.JSONDecodeError:
+        print('ERREUR de décodage JSON. Vérifiez le format de la réponse.')
+        return None
+    except KeyError:
+        print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
+        return None
+
+
 def get_points_id_from_char(device_id, char):
     """
     Récupère la liste de points dont le nom contient les caractères spécifiés via une requête GET.
