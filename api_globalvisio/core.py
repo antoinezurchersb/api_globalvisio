@@ -4,10 +4,14 @@ import json
 import pytz
 from datetime import datetime, timedelta
 
+
 token_info = {
     'token': None,
     'expiration': None
 }
+
+identifiant = None
+password = None
 
 
 def get_token():
@@ -24,8 +28,8 @@ def get_token():
 
     url = 'https://global-visio.com/api/auth/token'
     payload = json.dumps({
-        'username': 'a.zurcher',
-        'password': 'aeY2dT_U3BG-VJF'
+        'username': identifiant,
+        'password': password
     })
     headers = {'Content-Type': 'application/json'}
 
@@ -43,6 +47,57 @@ def get_token():
     except requests.RequestException as e:
         print(f"ERREUR lors de la requête d'authentification avec l'API de GlobalVisio: {e}")
         return None
+
+
+def get_all_sites():
+    """
+    Récupère tous les sites via une requête GET.
+    char est une liste de mots.
+    Gère les erreurs 404 et d'autres erreurs potentielles.
+    """
+    get_token()
+    if token_info['token'] is None:
+        return None, None
+
+    url = f"https://global-visio.com/api/sites/index?page=0&perPage=100"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token_info["token"]}'
+    }
+
+    try:
+        response = requests.get(url, headers=headers, data=payload)
+        if response.status_code != 200:
+            print(
+                f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: {response.json()['message']}")
+            return None, None
+        response.raise_for_status()
+
+        if response.json()['response']['sites']:
+            data = pd.DataFrame(response.json()['response']['sites'])
+            liste_nom = data['nom'].tolist()
+            liste_ville = data['ville'].tolist()
+
+            if len(liste_nom):
+                return liste_nom, liste_ville
+            else:
+                print(f"ERREUR lors de la requête de tous les sites car aucun site n'est trouvable.")
+                return None, None
+        else:
+            print(
+                f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: données inexistantes")
+            return None, None
+    except requests.RequestException as e:
+        print(f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: {e}")
+        return None, None
+    except json.JSONDecodeError:
+        print('ERREUR de décodage JSON. Vérifiez le format de la réponse.')
+        return None, None
+    except KeyError:
+        print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
+        return None, None
+
 
 
 def get_site_id_from_char(char):
@@ -465,6 +520,58 @@ class Point:
         else:
             return None
 
+    def save_history(self, data):
+        """
+        Enregistre l'historique d'un point virtuel dont le nom contient 'API' via des requêtes POST.
+        La fonction itère sur chaque ligne du dataframe `data` pour envoyer les valeurs historiques
+        avec les dates correspondantes.
+        """
+        if ' API'.lower() in self.label_automate.lower() or ' API'.lower() in self.label_humain.lower():
+
+            get_token()
+            if token_info['token'] is None:
+                return None
+
+            url = f"https://global-visio.com/api/points/saveConsumption/{self.id}"
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {token_info["token"]}'
+            }
+
+            data['value'].replace(0, 0.0000000001, inplace=True)
+
+            # Itération sur chaque ligne du dataframe pour extraire la date et la valeur
+            for index, row in data.iterrows():
+                payload = json.dumps({
+                    "value": row['value'],  # Utilisation de la valeur de la colonne 'value'
+                    "datetime": index.strftime('%Y-%m-%d %H:%M:%S'),  # Formatage de l'index datetime
+                    "modeSave": "history"
+                })
+
+                try:
+                    response = requests.request("POST", url, headers=headers, data=payload)
+                    if response.status_code != 200:
+                        print(
+                            f"ERREUR lors de la requête d'enregistrement de données sur le point {self.id} avec "
+                            f"l'API de GlobalVisio: {response.json().get('message', '')}")
+                        continue  # Continue l'itération même en cas d'erreur
+                    response.raise_for_status()
+
+                except requests.RequestException as e:
+                    print(f"ERREUR lors de la requête d'enregistrement de données sur le point {self.id} avec "
+                          f"l'API de GlobalVisio: {e}")
+                    continue
+                except json.JSONDecodeError:
+                    print('ERREUR de décodage JSON. Vérifiez le format de la réponse.')
+                    continue
+                except KeyError:
+                    print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
+                    continue
+        else:
+            print(f'ERREUR: vous essayez de modifier la valeur d\'un point de l\'équipement non dédié '
+                  f'à l\'API: {self.label_humain}')
+            return None
+
 
 def get_device_id_from_char(site_id, char):
     """
@@ -571,6 +678,10 @@ def get_points_id_from_char(device_id, char):
 
 # site = Site(2243)
 # device = Equipement(1910)
-# point = Point(76750)
+# point = Point(201314)
 # data = point.get_history('2024-01-10', '2024-02-10')
+# point_save = Point(247118)
+# point_save.save_history(data)
 # print(1)
+
+get_all_sites()
