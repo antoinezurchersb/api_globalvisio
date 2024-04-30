@@ -730,6 +730,77 @@ def get_points_id_from_char(device_id, char):
         print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
         return None
 
+
+def get_all_points(device_id):
+    """
+    Récupère la liste de points dont le nom contient les caractères spécifiés via une requête GET.
+    char est une liste de mots.
+    Gère les erreurs 404 et d'autres erreurs potentielles.
+    """
+    get_token()
+    if token_info['token'] is None:
+        return None
+
+    url = f"https://global-visio.com/api/devices/index/{device_id}"
+    payload = {}
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token_info["token"]}'
+    }
+
+    try:
+        response = requests.get(url, headers=headers, data=payload)
+        if response.status_code != 200:
+            print(
+                f"ERREUR lors de la requête de points de l'équipement {device_id} avec l'API de GlobalVisio: {response.json()['message']}")
+            return None
+        response.raise_for_status()
+
+        if response.json()['response']['device']:
+            data = pd.DataFrame(response.json()['response']['device']['points'])
+
+            if len(data):
+                return data
+            else:
+                print(
+                    f"ERREUR lors de la requête des points l'équipement {device_id} car aucun n'est trouvable.'")
+                return None
+
+        else:
+            print(
+                f"ERREUR lors de la requête de points de l'équipement {device_id} avec l'API de GlobalVisio: données inexistantes")
+            return None
+    except requests.RequestException as e:
+        print(f"ERREUR lors de la requête de points de l'équipement {device_id} avec l'API de GlobalVisio: {e}")
+        return None
+    except json.JSONDecodeError:
+        print('ERREUR de décodage JSON. Vérifiez le format de la réponse.')
+        return None
+    except KeyError:
+        print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
+        return None
+
+
+def get_all_points_from_site(site_id):
+    data_devices = get_all_devices(site_id)
+
+    list_devices_id = data_devices['id'].tolist()
+
+    # Initialiser une liste vide pour stocker tous les DataFrame de chaque appareil
+    all_data_points = []
+
+    for device_id in list_devices_id:
+        data_points = get_all_points(device_id)
+        # Ajouter le DataFrame à la liste
+        all_data_points.append(data_points)
+
+    # Concaténer tous les DataFrame dans un seul DataFrame
+    combined_data_points = pd.concat(all_data_points, ignore_index=True)
+
+    return combined_data_points
+
+
+
 # site = Site(2243)
 # device = Equipement(1910)
 # point = Point(201314)
@@ -738,4 +809,4 @@ def get_points_id_from_char(device_id, char):
 # point_save.save_history(data)
 # print(1)
 
-# get_all_sites()
+# get_all_points_from_site(3659)
