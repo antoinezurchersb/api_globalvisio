@@ -684,4 +684,4 @@ def get_points_id_from_char(device_id, char):
 # point_save.save_history(data)
 # print(1)
 
-get_all_sites()
+# get_all_sites()
