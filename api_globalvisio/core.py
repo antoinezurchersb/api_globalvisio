@@ -66,7 +66,7 @@ def get_all_sites():
     """
     get_token()
     if token_info['token'] is None:
-        return None, None
+        return None
 
     url = f"https://global-visio.com/api/sites/index?page=0&perPage=100"
     payload = {}
@@ -80,32 +80,30 @@ def get_all_sites():
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: {response.json()['message']}")
-            return None, None
+            return None
         response.raise_for_status()
 
         if response.json()['response']['sites']:
             data = pd.DataFrame(response.json()['response']['sites'])
-            liste_nom = data['nom'].tolist()
-            liste_ville = data['ville'].tolist()
 
-            if len(liste_nom):
-                return liste_nom, liste_ville
+            if len(data):
+                return data
             else:
                 print(f"ERREUR lors de la requête de tous les sites car aucun site n'est trouvable.")
-                return None, None
+                return None
         else:
             print(
                 f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: données inexistantes")
-            return None, None
+            return None
     except requests.RequestException as e:
         print(f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: {e}")
-        return None, None
+        return None
     except json.JSONDecodeError:
         print('ERREUR de décodage JSON. Vérifiez le format de la réponse.')
-        return None, None
+        return None
     except KeyError:
         print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
-        return None, None
+        return None
 
 
 def get_site_id_from_char(char):
