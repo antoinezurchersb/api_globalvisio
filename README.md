@@ -7,4 +7,4 @@ Le package `api_globalvisio` est une bibliothèque Python conçue pour faciliter
 Pour installer ce package, utilisez pip :
 
 ```bash
-pip install api_globalvisio
+pip install git+https://github.com/antoinezurchersb/api_globalvisio.git
