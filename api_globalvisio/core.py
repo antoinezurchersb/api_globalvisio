@@ -784,20 +784,25 @@ def get_all_points(device_id):
 def get_all_points_from_site(site_id):
     data_devices = get_all_devices(site_id)
 
-    list_devices_id = data_devices['id'].tolist()
+    if len(data_devices):
 
-    # Initialiser une liste vide pour stocker tous les DataFrame de chaque appareil
-    all_data_points = []
+        list_devices_id = data_devices['id'].tolist()
 
-    for device_id in list_devices_id:
-        data_points = get_all_points(device_id)
-        # Ajouter le DataFrame à la liste
-        all_data_points.append(data_points)
+        # Initialiser une liste vide pour stocker tous les DataFrame de chaque appareil
+        all_data_points = []
 
-    # Concaténer tous les DataFrame dans un seul DataFrame
-    combined_data_points = pd.concat(all_data_points, ignore_index=True)
+        for device_id in list_devices_id:
+            data_points = get_all_points(device_id)
+            # Ajouter le DataFrame à la liste
+            all_data_points.append(data_points)
 
-    return combined_data_points
+        # Concaténer tous les DataFrame dans un seul DataFrame
+        combined_data_points = pd.concat(all_data_points, ignore_index=True)
+
+        return combined_data_points
+
+    else:
+        return None
 
 
 
