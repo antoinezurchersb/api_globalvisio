@@ -784,7 +784,7 @@ def get_all_points(device_id):
 def get_all_points_from_site(site_id):
     data_devices = get_all_devices(site_id)
 
-    if len(data_devices):
+    if data_devices is not None:
 
         list_devices_id = data_devices['id'].tolist()
 
