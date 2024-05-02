@@ -349,13 +349,20 @@ class Point:
             if response.json()['response']['point']:
                 self.device_id = response.json()['response']['point']['device']['id']
                 self.site_id = response.json()['response']['point']['device']['site']['id']
-                self.label_automate = response.json()['response']['point']['labelAutomate']
-                self.label_humain = response.json()['response']['point']['labelHumain']
-                self.last_value = response.json()['response']['point']['lastValue']
-                self.last_value_date = response.json()['response']['point']['lastValueDate']
-                self.type = response.json()['response']['point']['type']['nom']
-                self.subtype = response.json()['response']['point']['subtype']['nom']
-                self.unit = response.json()['response']['point']['unit']['symbole']
+                if response.json()['response']['point']['labelAutomate']:
+                    self.label_automate = response.json()['response']['point']['labelAutomate']
+                if response.json()['response']['point']['labelHumain']:
+                    self.label_humain = response.json()['response']['point']['labelHumain']
+                if response.json()['response']['point']['lastValue']:
+                    self.last_value = response.json()['response']['point']['lastValue']
+                if response.json()['response']['point']['lastValueDate']:
+                    self.last_value_date = response.json()['response']['point']['lastValueDate']
+                if response.json()['response']['point']['type']:
+                    self.type = response.json()['response']['point']['type']['nom']
+                if response.json()['response']['point']['subtype']:
+                    self.subtype = response.json()['response']['point']['subtype']['nom']
+                if response.json()['response']['point']['unit']:
+                    self.unit = response.json()['response']['point']['unit']['symbole']
             else:
                 print(
                     f"ERREUR lors de la requête d'attributs du point {self.id} avec l'API de GlobalVisio: données inexistantes")
