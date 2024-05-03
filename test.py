@@ -1,3 +1,4 @@
+import api_globalvisio
 from api_globalvisio.core import *
 
 credentials.set_credentials("a.zurcher", "aeY2dT_U3BG-VJF")
@@ -10,5 +11,7 @@ credentials.set_credentials("a.zurcher", "aeY2dT_U3BG-VJF")
 # point_save.save_history(data)
 # print(1)
 
-get_all_points_from_site(3659)
+# get_all_points_from_site(3659)
+
+print(credentials.remaining_day_requests)
 

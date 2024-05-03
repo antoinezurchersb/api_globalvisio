@@ -14,6 +14,7 @@ class Credentials:
     def __init__(self):
         self.identifiant = None
         self.password = None
+        self.remaining_day_requests = None
 
     def set_credentials(self, identifiant, password):
         self.identifiant = identifiant
@@ -28,6 +29,7 @@ def get_token():
     Envoie une requête POST pour obtenir un token d'authentification.
     Gère les erreurs de requête et vérifie l'expiration du token.
     """
+    
     paris_timezone = pytz.timezone("Europe/Paris")
     current_time = datetime.now(paris_timezone)
 
@@ -44,6 +46,8 @@ def get_token():
 
     try:
         response = requests.post(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête d'authentification avec l'API de GlobalVisio: {response.json()['message']}")
@@ -64,6 +68,7 @@ def get_all_sites():
     char est une liste de mots.
     Gère les erreurs 404 et d'autres erreurs potentielles.
     """
+    
     get_token()
     if token_info['token'] is None:
         return None
@@ -77,6 +82,8 @@ def get_all_sites():
 
     try:
         response = requests.get(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: {response.json()['message']}")
@@ -112,6 +119,7 @@ def get_site_id_from_char(char):
     char est une liste de mots.
     Gère les erreurs 404 et d'autres erreurs potentielles.
     """
+    
     get_token()
     if token_info['token'] is None:
         return None
@@ -125,6 +133,8 @@ def get_site_id_from_char(char):
 
     try:
         response = requests.get(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête des sites avec l'API de GlobalVisio: {response.json()['message']}")
@@ -188,6 +198,7 @@ class Site:
         Récupère les attributs d'un site spécifié via une requête GET.
         Gère les erreurs 404 et d'autres erreurs potentielles.
         """
+        
         get_token()
         if token_info['token'] is None:
             return None
@@ -201,6 +212,8 @@ class Site:
 
         try:
             response = requests.get(url, headers=headers, data=payload)
+            if 'X-RateLimit-Remaining' in response.headers:
+                credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
             if response.status_code != 200:
                 print(
                     f"ERREUR lors de la requête d'attributs du site {self.id} avec l'API de GlobalVisio: {response.json()['message']}")
@@ -257,6 +270,7 @@ class Equipement:
         Récupère les attributs d'un site spécifié via une requête GET.
         Gère les erreurs 404 et d'autres erreurs potentielles.
         """
+        
         get_token()
         if token_info['token'] is None:
             return None
@@ -270,6 +284,8 @@ class Equipement:
 
         try:
             response = requests.get(url, headers=headers, data=payload)
+            if 'X-RateLimit-Remaining' in response.headers:
+                credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
             if response.status_code != 200:
                 print(
                     f"ERREUR lors de la requête d'attributs de l'équipement {self.id} avec l'API de GlobalVisio: {response.json()['message']}")
@@ -327,6 +343,7 @@ class Point:
         Récupère les attributs d'un site spécifié via une requête GET.
         Gère les erreurs 404 et d'autres erreurs potentielles.
         """
+        
         get_token()
         if token_info['token'] is None:
             return None
@@ -340,6 +357,8 @@ class Point:
 
         try:
             response = requests.get(url, headers=headers, data=payload)
+            if 'X-RateLimit-Remaining' in response.headers:
+                credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
             if response.status_code != 200:
                 print(
                     f"ERREUR lors de la requête d'attributs du point {self.id} avec l'API de GlobalVisio: {response.json()['message']}")
@@ -383,6 +402,7 @@ class Point:
         Gère les périodes de plus de 3 mois en divisant la requête en plusieurs sous-requêtes.
         Dates au format 'yyyy-mm-dd'.
         """
+        
         get_token()
         if token_info['token'] is None:
             return None
@@ -408,6 +428,8 @@ class Point:
 
             try:
                 response = requests.get(url, headers=headers)
+                if 'X-RateLimit-Remaining' in response.headers:
+                    credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
                 if response.status_code != 200:
                     print(
                         f"ERREUR lors de la requête d'historique avec l'API de GlobalVisio: {response.json()['message']}")
@@ -468,6 +490,7 @@ class Point:
         Gère les périodes de plus de 1 an en divisant la requête en plusieurs sous-requêtes.
         Dates au format 'yyyy-mm-dd'.
         """
+        
         get_token()
         if token_info['token'] is None:
             return None
@@ -493,6 +516,8 @@ class Point:
 
             try:
                 response = requests.get(url, headers=headers)
+                if 'X-RateLimit-Remaining' in response.headers:
+                    credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
                 if response.status_code != 200:
                     print(
                         f"ERREUR lors de la requête de consommation journalière avec l'API de GlobalVisio: {response.json()['message']}")
@@ -541,6 +566,7 @@ class Point:
         """
         if ' API'.lower() in self.label_automate.lower() or ' API'.lower() in self.label_humain.lower():
 
+            
             get_token()
             if token_info['token'] is None:
                 return None
@@ -563,6 +589,8 @@ class Point:
 
                 try:
                     response = requests.request("POST", url, headers=headers, data=payload)
+                    if 'X-RateLimit-Remaining' in response.headers:
+                        credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
                     if response.status_code != 200:
                         print(
                             f"ERREUR lors de la requête d'enregistrement de données sur le point {self.id} avec "
@@ -592,6 +620,7 @@ def get_device_id_from_char(site_id, char):
     char est une liste de mots.
     Gère les erreurs 404 et d'autres erreurs potentielles.
     """
+    
     get_token()
     if token_info['token'] is None:
         return None
@@ -605,6 +634,8 @@ def get_device_id_from_char(site_id, char):
 
     try:
         response = requests.get(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête d'équipements du site {site_id} avec l'API de GlobalVisio: {response.json()['message']}")
@@ -645,6 +676,7 @@ def get_all_devices(site_id):
     char est une liste de mots.
     Gère les erreurs 404 et d'autres erreurs potentielles.
     """
+    
     get_token()
     if token_info['token'] is None:
         return None
@@ -658,6 +690,8 @@ def get_all_devices(site_id):
 
     try:
         response = requests.get(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête d'équipements du site {site_id} avec l'API de GlobalVisio: {response.json()['message']}")
@@ -694,6 +728,7 @@ def get_points_id_from_char(device_id, char):
     char est une liste de mots.
     Gère les erreurs 404 et d'autres erreurs potentielles.
     """
+    
     get_token()
     if token_info['token'] is None:
         return None
@@ -707,6 +742,8 @@ def get_points_id_from_char(device_id, char):
 
     try:
         response = requests.get(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête de points de l'équipement {device_id} avec l'API de GlobalVisio: {response.json()['message']}")
@@ -744,6 +781,7 @@ def get_all_points(device_id):
     char est une liste de mots.
     Gère les erreurs 404 et d'autres erreurs potentielles.
     """
+    
     get_token()
     if token_info['token'] is None:
         return None
@@ -757,6 +795,8 @@ def get_all_points(device_id):
 
     try:
         response = requests.get(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
         if response.status_code != 200:
             print(
                 f"ERREUR lors de la requête de points de l'équipement {device_id} avec l'API de GlobalVisio: {response.json()['message']}")
