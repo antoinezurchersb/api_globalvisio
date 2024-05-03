@@ -320,9 +320,9 @@ class Point:
         self.subtype = None
         self.unit = None
 
-        self.get_device_attributes()
+        self.get_point_attributes()
 
-    def get_device_attributes(self):
+    def get_point_attributes(self):
         """
         Récupère les attributs d'un site spécifié via une requête GET.
         Gère les erreurs 404 et d'autres erreurs potentielles.
@@ -424,7 +424,7 @@ class Point:
                     sub_data['date'] = sub_data['date'].dt.tz_convert('Europe/Paris')
                     sub_data.drop_duplicates(subset='date', keep='first', inplace=True)
                     sub_data.set_index('date', inplace=True)
-                    sub_data['unit'] = response.json()['response']['point']['unit']['symbole']
+                    # sub_data['unit'] = response.json()['response']['point']['unit']['symbole']
                     data_frames.append(sub_data)
                 else:
                     print(
@@ -454,9 +454,9 @@ class Point:
                 df_concat.iloc[0, 0] = 0.0
             # Si les valeurs sont des consommations horaires ou moins
             else:
-                unit = df_concat.iloc[0, 1]
+                # unit = df_concat.iloc[0, 1]
                 df_concat = df_concat['value'].resample('h').mean().to_frame()
-                df_concat['unit'] = unit
+                # df_concat['unit'] = unit
 
             return df_concat
         else:
@@ -503,7 +503,7 @@ class Point:
                 if response.json()['response']['consumption']:
                     sub_data = pd.DataFrame(response.json()['response']['consumption'])
                     sub_data = sub_data[['date', 'value']]
-                    sub_data['unit'] = response.json()['response']['point']['unit']['symbole']
+                    # sub_data['unit'] = response.json()['response']['point']['unit']['symbole']
                     sub_data['date'] = pd.to_datetime(sub_data['date'], utc=True)
                     sub_data['date'] = sub_data['date'].dt.tz_convert('Europe/Paris')
                     sub_data.drop_duplicates(subset='date', keep='first', inplace=True)
