@@ -336,8 +336,6 @@ class Point:
         self.subtype = None
         self.unit = None
 
-        self.get_point_attributes()
-
     def get_point_attributes(self):
         """
         Récupère les attributs d'un site spécifié via une requête GET.
