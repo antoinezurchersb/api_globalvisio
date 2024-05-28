@@ -24,6 +24,44 @@ class Credentials:
 credentials = Credentials()
 
 
+def check_user_exists():
+    """
+    Envoie une requête POST pour obtenir un token d'authentification.
+    Gère les erreurs de requête et vérifie l'expiration du token.
+    """
+
+    paris_timezone = pytz.timezone("Europe/Paris")
+    current_time = datetime.now(paris_timezone)
+
+    # Vérifier si le token actuel est toujours valide
+    if token_info['token'] and token_info['expiration'] > current_time:
+        return token_info['token']
+
+    url = 'https://global-visio.com/api/auth/token'
+    payload = json.dumps({
+        'username': credentials.identifiant,
+        'password': credentials.password
+    })
+    headers = {'Content-Type': 'application/json'}
+
+    try:
+        response = requests.post(url, headers=headers, data=payload)
+        if 'X-RateLimit-Remaining' in response.headers:
+            credentials.remaining_day_requests = response.headers['X-RateLimit-Remaining']
+        if response.status_code != 200:
+            error_message = f"ERREUR lors de la requête d'authentification avec l'API de GlobalVisio: {response.json()['message']}"
+            print(error_message)
+            return False, error_message
+        response.raise_for_status()  # Gère les autres ERREURs HTTP
+
+        return True, ""
+
+    except requests.RequestException as e:
+        error_message = f"ERREUR lors de la requête d'authentification avec l'API de GlobalVisio: {e}"
+        print(error_message)
+        return False, error_message
+
+
 def get_token():
     """
     Envoie une requête POST pour obtenir un token d'authentification.
