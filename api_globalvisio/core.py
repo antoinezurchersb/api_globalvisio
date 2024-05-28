@@ -30,13 +30,6 @@ def check_user_exists():
     Gère les erreurs de requête et vérifie l'expiration du token.
     """
 
-    paris_timezone = pytz.timezone("Europe/Paris")
-    current_time = datetime.now(paris_timezone)
-
-    # Vérifier si le token actuel est toujours valide
-    if token_info['token'] and token_info['expiration'] > current_time:
-        return token_info['token']
-
     url = 'https://global-visio.com/api/auth/token'
     payload = json.dumps({
         'username': credentials.identifiant,
