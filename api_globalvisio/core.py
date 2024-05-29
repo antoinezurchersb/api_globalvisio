@@ -470,7 +470,7 @@ class Point:
                     sub_data = pd.DataFrame(response.json()['response']['history'])
                     sub_data = sub_data[['date', 'value']]
                     sub_data['date'] = pd.to_datetime(sub_data['date'], utc=True)
-                    sub_data = sub_data[sub_data['date'].dt.second == 0]
+                    # sub_data = sub_data[sub_data['date'].dt.second == 0]
                     sub_data = sub_data.sort_values(by=['date', 'value'], ascending=[True, True])
                     sub_data['date'] = sub_data['date'].dt.tz_convert('Europe/Paris')
                     sub_data.drop_duplicates(subset='date', keep='first', inplace=True)
