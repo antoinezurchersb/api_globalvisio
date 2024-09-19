@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: api-globalvisio
+Version: 0.1
+Summary: Une API client pour interagir avec la plateforme GlobalVisio.
+Home-page: https://github.com/antoinezurchersb/api_globalvisio
+Author: Antoine Zürcher (Solares Bauen)
+Author-email: zurcher@solares-bauen.fr
+Keywords: api,GlobalVisio,client,consumption data,energy data
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: pandas>=1.1.5
+Requires-Dist: requests>=2.25.1
+Requires-Dist: pytz
+
+# api_globalvisio
+
+Le package `api_globalvisio` est une bibliothÃ¨que Python conÃ§ue pour faciliter l'interaction avec l'API de GlobalVisio. Elle permet aux dÃ©veloppeurs de rÃ©cupÃ©rer facilement des donnÃ©es d'historique de consommation Ã©nergÃ©tique, de gÃ©rer des authentifications et d'effectuer des recherches ciblÃ©es sur des points spÃ©cifiques.
+
+## Installation
+
+Pour installer ce package, utilisez pip :
+
+```bash
+pip install api_globalvisio

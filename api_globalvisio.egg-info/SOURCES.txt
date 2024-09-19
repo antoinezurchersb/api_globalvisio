@@ -1,0 +1,9 @@
+README.md
+setup.py
+api_globalvisio/__init__.py
+api_globalvisio/core.py
+api_globalvisio.egg-info/PKG-INFO
+api_globalvisio.egg-info/SOURCES.txt
+api_globalvisio.egg-info/dependency_links.txt
+api_globalvisio.egg-info/requires.txt
+api_globalvisio.egg-info/top_level.txt
