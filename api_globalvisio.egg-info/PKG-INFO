@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: api-globalvisio
-Version: 0.2
+Version: 0.3
 Summary: Une API client pour interagir avec la plateforme GlobalVisio.
 Home-page: https://github.com/antoinezurchersb/api_globalvisio
 Author: Antoine Zürcher (Solares Bauen)

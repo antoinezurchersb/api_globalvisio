@@ -28,3 +28,6 @@ setup(
     python_requires='>=3.7',
     keywords='api, GlobalVisio, client, consumption data, energy data',
 )
+
+# commande pour recréer le package: python setup.py sdist bdist_wheel
+# commande pour upgrade le package
