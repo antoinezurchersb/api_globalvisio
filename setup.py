@@ -30,4 +30,4 @@ setup(
 )
 
 # commande pour recréer le package: python setup.py sdist bdist_wheel
-# commande pour upgrade le package
+# commande pour upgrade le package: pip install --upgrade api_globalvisio
