@@ -9,18 +9,20 @@ token_info = {
     'expiration': None
 }
 
-api_key = None
-
 
 class Credentials:
     def __init__(self):
         self.identifiant = None
         self.password = None
         self.remaining_day_requests = None
+        self.api_key = None
 
     def set_credentials(self, identifiant, password):
         self.identifiant = identifiant
         self.password = password
+
+    def set_api_key(self, api_key):
+        self.api_key = api_key
 
 
 credentials = Credentials()
@@ -107,7 +109,7 @@ def get_all_sites():
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {api_key}'
+        'Authorization': f'Bearer {credentials.api_key}'
     }
 
     try:
@@ -155,7 +157,7 @@ def get_site_id_from_char(char):
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {api_key}'
+        'Authorization': f'Bearer {credentials.api_key}'
     }
 
     try:
@@ -231,7 +233,7 @@ class Site:
         payload = {}
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {api_key}'
+            'Authorization': f'Bearer {credentials.api_key}'
         }
 
         try:
@@ -300,7 +302,7 @@ class Equipement:
         payload = {}
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {api_key}'
+            'Authorization': f'Bearer {credentials.api_key}'
         }
 
         try:
@@ -368,7 +370,7 @@ class Point:
         payload = {}
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {api_key}'
+            'Authorization': f'Bearer {credentials.api_key}'
         }
 
         try:
@@ -436,7 +438,7 @@ class Point:
             url = f'https://global-visio.com/api/points/history/{self.id}?dateStart={sub_start}&dateEnd={sub_end}'
             headers = {
                 'Content-Type': 'application/json',
-                'Authorization': f'Bearer {api_key}'
+                'Authorization': f'Bearer {credentials.api_key}'
             }
 
             try:
@@ -522,7 +524,7 @@ class Point:
             url = f'https://global-visio.com/api/points/consumption/{self.id}?dateStart={sub_start}&dateEnd={sub_end}&period=2'
             headers = {
                 'Content-Type': 'application/json',
-                'Authorization': f'Bearer {api_key}'
+                'Authorization': f'Bearer {credentials.api_key}'
             }
 
             try:
@@ -580,7 +582,7 @@ class Point:
             url = f"https://global-visio.com/api/points/saveConsumption/{self.id}"
             headers = {
                 'Content-Type': 'application/json',
-                'Authorization': f'Bearer {api_key}'
+                'Authorization': f'Bearer {credentials.api_key}'
             }
 
             # data['value'].replace(0, 0.0000000001, inplace=True)
@@ -635,7 +637,7 @@ def get_device_id_from_char(site_id, char):
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {api_key}'
+        'Authorization': f'Bearer {credentials.api_key}'
     }
 
     try:
@@ -688,7 +690,7 @@ def get_all_devices(site_id):
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {api_key}'
+        'Authorization': f'Bearer {credentials.api_key}'
     }
 
     try:
@@ -737,7 +739,7 @@ def get_points_id_from_char(device_id, char):
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {api_key}'
+        'Authorization': f'Bearer {credentials.api_key}'
     }
 
     try:
@@ -787,7 +789,7 @@ def get_all_points(device_id):
     payload = {}
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {api_key}'
+        'Authorization': f'Bearer {credentials.api_key}'
     }
 
     try:
