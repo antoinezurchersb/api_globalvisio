@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: api-globalvisio
-Version: 0.3
+Version: 0.4
 Summary: Une API client pour interagir avec la plateforme GlobalVisio.
 Home-page: https://github.com/antoinezurchersb/api_globalvisio
 Author: Antoine Zürcher (Solares Bauen)
@@ -14,6 +14,7 @@ Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.11
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 Requires-Dist: pandas>=1.1.5

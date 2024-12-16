@@ -414,7 +414,7 @@ class Point:
             print('ERREUR dans la structure de données reçue. Vérifiez le format des données.')
             return None
 
-    def get_history(self, start, end):
+    def get_history(self, start, end, is_counter_index=True):
         """
         Récupère l'historique horaire en kWh d'un point via des requêtes GET.
         Gère les périodes de plus de 3 mois en divisant la requête en plusieurs sous-requêtes.
@@ -485,7 +485,7 @@ class Point:
             df_concat = pd.concat(data_frames)
             # df_concat = df_concat[df_concat['value'] != 0.0]
             # Si les valeurs sont un index
-            if df_concat['value'].is_monotonic_increasing:
+            if df_concat['value'].is_monotonic_increasing and is_counter_index:
                 df_concat = df_concat[(df_concat.index.minute == 0) & (df_concat.index.second == 0)]
                 df_concat['value'] = df_concat.iloc[:, 0].diff()
                 if not df_concat.empty:
