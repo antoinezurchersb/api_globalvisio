@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='api_globalvisio',
-    version='0.4',
+    version='0.6',
     packages=find_packages(),
     install_requires=[
         'pandas>=1.1.5',
